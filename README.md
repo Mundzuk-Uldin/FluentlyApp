@@ -40,9 +40,9 @@ python app.py
 ```
 
 ## Technologies
-•⁠  ⁠Python
-•⁠  ⁠Flask
-•⁠  ⁠OpenAI API
-•⁠  ⁠JavaScript
-•⁠  ⁠HTML/CSS
-•⁠  ⁠Bootstrap
+-⁠  ⁠Python
+-⁠  ⁠Flask
+-⁠  ⁠OpenAI API
+-⁠  ⁠JavaScript
+-⁠  ⁠HTML/CSS
+-⁠  ⁠Bootstrap
