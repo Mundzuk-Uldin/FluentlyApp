@@ -6,10 +6,19 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+#languageSelect {
+    margin-top: 0.5rem;
+}
+
 .app-title {
     font-weight: 700;
     color: #343a40;
 }
+.app-subtitle {
+    font-weight: 300;
+    color: #343a40;
+}
+
 
 .card {
     max-width: 800px;

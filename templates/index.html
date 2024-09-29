@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Voice to Text Correction App</title>
+    <title>Fluentify</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome CSS -->
@@ -13,12 +13,12 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="Fluently.png" type="image/png">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Voice Tutor</a>
+            <a class="navbar-brand" href="#">Fluentify</a>
             <button class="btn btn-outline-light ms-auto" data-bs-toggle="modal" data-bs-target="#helpModal">
                 <i class="fas fa-question-circle"></i> Help
             </button>
@@ -26,10 +26,18 @@
     </nav>
     <div class="container mt-5">
         <div class="text-center mb-4">
-            <h1 class="app-title">Voice to Text Correction App</h1>
+            <h1 class="app-title">Become fluent in any language.</h1>
+            <h6 class="app-subtitle">Learn grammar and pronunciation in an interactive way.</h6>
         </div>
         <div class="card shadow-lg">
             <div class="card-body">
+                <!-- Language Selection -->
+                <div class="mb-4">
+                    <label for="languageSelect" class="form-label"><strong>Select Language:</strong></label>
+                    <select id="languageSelect" class="form-select" aria-label="Language Selection">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
                 <div class="text-center mb-4">
                     <button id="recordButton" class="btn btn-lg btn-primary me-2" data-bs-toggle="tooltip" title="Start recording your voice" aria-label="Start Recording">
                         <i class="fas fa-microphone"></i> Start Recording
@@ -51,20 +59,18 @@
                     </div>
                 </div>
 
+                <!-- Transcribed Text -->
                 <div class="mb-4">
                     <h2>Transcribed Text:</h2>
                     <div id="transcribedText" class="border p-3 bg-light rounded" style="min-height: 100px;" aria-live="polite"></div>
                 </div>
 
+                <!-- Corrected Text -->
                 <div class="mb-4">
                     <h2>Corrected Text:</h2>
                     <div id="correctedText" class="border p-3 bg-light rounded" style="min-height: 100px;" aria-live="polite"></div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="voiceSelect" class="form-label"><strong>Choose a Voice:</strong></label>
-                    <select id="voiceSelect" class="form-select" aria-label="Voice Selection"></select>
-                </div>
 
                 <!-- Speech Rate Control -->
                 <div class="mb-4">
@@ -73,11 +79,24 @@
                     <span id="speechRateValue">1.0</span>x
                 </div>
 
+                <!-- Play Corrected Text Button -->
                 <div class="text-center">
-                    <button id="playButton" class="btn btn-lg btn-success" disabled data-bs-toggle="tooltip" title="Listen to the corrected text" aria-label="Play Corrected Text">
+                    <button id="playButton" class="btn btn-lg btn-success" disabled>
                         <i class="fas fa-play"></i> Play Corrected Text
                     </button>
                 </div>
+
+                <!-- Explanation Text -->
+                <div class="mb-4">
+                    <h2>Explanation:</h2>
+                    <div id="explanationText" class="border p-3 bg-light rounded" style="min-height: 100px;" aria-live="polite"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="voiceSelect" class="form-label"><strong>Choose a Voice:</strong></label>
+                    <select id="voiceSelect" class="form-select" aria-label="Voice Selection"></select>
+                </div>
+
             </div>
         </div>
     </div>

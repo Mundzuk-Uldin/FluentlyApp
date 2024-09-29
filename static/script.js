@@ -9,13 +9,44 @@ const playButton = document.getElementById('playButton');
 const statusText = document.getElementById('status');
 const transcribedTextElement = document.getElementById('transcribedText');
 const correctedTextElement = document.getElementById('correctedText');
+const explanationText = document.getElementById('explanationText');
 const voiceSelect = document.getElementById('voiceSelect');
+const languageSelect = document.getElementById('languageSelect');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const errorAlert = document.getElementById('errorAlert');
 const speechRate = document.getElementById('speechRate');
 const speechRateValue = document.getElementById('speechRateValue');
 
 let voices = [];
+let detectedLanguageCode = 'en'; // Default to English
+
+const languageOptions = [
+    { code: 'auto', name: 'Auto Detect' },
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Spanish' },
+    { code: 'pt', name: 'Portuguese'},
+    { code: 'zh', name: 'Chinese' },
+    { code: 'fr', name: 'French' },
+    { code: 'de', name: 'German' },
+    { code: 'it', name: 'Italian' },
+    { code: 'ja', name: 'Japanese' },
+    { code: 'ko', name: 'Korean' },
+    { code: 'ru', name: 'Russian' },
+    // Add more languages as needed
+];
+
+// Populate language selection dropdown
+function populateLanguageList() {
+    languageOptions.forEach(lang => {
+        const option = document.createElement('option');
+        option.value = lang.code;
+        option.textContent = lang.name;
+        languageSelect.appendChild(option);
+    });
+}
+
+// Call the function to populate the language list
+populateLanguageList();
 
 // Initialize Bootstrap tooltips
 const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -39,6 +70,22 @@ function populateVoiceList() {
         option.textContent = `${voice.name} (${voice.lang})`;
         voiceSelect.appendChild(option);
     });
+
+    // Select the voice that matches the detected or selected language
+    selectVoiceForLanguage(detectedLanguageCode);
+}
+
+// Function to select voice based on language code
+function selectVoiceForLanguage(languageCode) {
+    // Match the full language code or just the primary language
+    let selectedVoice = voices.find(voice => voice.lang.startsWith(languageCode));
+    if (selectedVoice) {
+        const selectedIndex = voices.indexOf(selectedVoice);
+        voiceSelect.selectedIndex = selectedIndex;
+    } else {
+        // If no voice matches, default to the first voice
+        voiceSelect.selectedIndex = 0;
+    }
 }
 
 // Initial population of voice list
@@ -87,7 +134,6 @@ recordButton.addEventListener('click', async () => {
 
     recordButton.disabled = true;
     stopButton.disabled = false;
-    playButton.disabled = true; // Disable Play Button during recording
 });
 
 // Event listener for Stop Recording button
@@ -103,6 +149,12 @@ stopButton.addEventListener('click', () => {
         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
         let formData = new FormData();
         formData.append('audio_data', audioBlob, 'recording.webm');
+
+        // Get the selected language
+        const selectedLanguage = languageSelect.value;
+
+        // Append the selected language to the form data
+        formData.append('language', selectedLanguage);
 
         fetch('/process_audio', {
             method: 'POST',
@@ -122,13 +174,24 @@ stopButton.addEventListener('click', () => {
             transcribedTextElement.innerText = data.transcribed_text;
 
             // Render the corrected text with Markdown support
-            const markdownText = data.corrected_text;
-            const rawHTML = marked.parse(markdownText);
-            const sanitizedHTML = DOMPurify.sanitize(rawHTML);
-            correctedTextElement.innerHTML = sanitizedHTML;
+            const correctedMarkdown = data.corrected_text;
+            const correctedRawHTML = marked.parse(correctedMarkdown);
+            const correctedSanitizedHTML = DOMPurify.sanitize(correctedRawHTML);
+            correctedTextElement.innerHTML = correctedSanitizedHTML;
+
+            // Render the explanation text with Markdown support
+            const explanationMarkdown = data.explanation;
+            const explanationRawHTML = marked.parse(explanationMarkdown);
+            const explanationSanitizedHTML = DOMPurify.sanitize(explanationRawHTML);
+            explanationText.innerHTML = explanationSanitizedHTML;
+
+            // Get the detected language code
+            detectedLanguageCode = data.language_code || 'en';
+
+            // Update the voice selection based on the detected or selected language
+            selectVoiceForLanguage(detectedLanguageCode);
 
             playButton.disabled = false; // Enable Play Button
-            playCorrectedText(); // Automatically play the corrected text
         })
         .catch(error => {
             loadingSpinner.style.display = 'none'; // Hide spinner
@@ -139,6 +202,11 @@ stopButton.addEventListener('click', () => {
     });
 });
 
+// Event listener for Play Corrected Text button
+playButton.addEventListener('click', () => {
+    playCorrectedText();
+});
+
 // Function to play the corrected text
 function playCorrectedText() {
     const correctedText = correctedTextElement.innerText || correctedTextElement.textContent;
@@ -146,17 +214,14 @@ function playCorrectedText() {
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(correctedText);
 
-        // Get the selected voice
         const selectedVoiceIndex = voiceSelect.selectedIndex;
         if (voices.length > 0 && selectedVoiceIndex >= 0) {
             utterance.voice = voices[selectedVoiceIndex];
         }
 
-        // Get the selected speech rate
         const rate = parseFloat(speechRate.value);
         utterance.rate = rate;
 
-        // Optional: Set other voice parameters
         utterance.pitch = 1;
 
         utterance.onerror = function(event) {
@@ -168,8 +233,3 @@ function playCorrectedText() {
         alert('Sorry, your browser does not support text to speech!');
     }
 }
-
-// Event listener for Play Corrected Text button
-playButton.addEventListener('click', () => {
-    playCorrectedText();
-});
