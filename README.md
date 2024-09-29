@@ -38,3 +38,11 @@ OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 ```shell
 python app.py
 ```
+
+## Technologies
+•⁠  ⁠Python
+•⁠  ⁠Flask
+•⁠  ⁠OpenAI API
+•⁠  ⁠JavaScript
+•⁠  ⁠HTML/CSS
+•⁠  ⁠Bootstrap
