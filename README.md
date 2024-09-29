@@ -4,6 +4,7 @@ Fluentify is an innovative language learning app designed to help users master g
 Mess up? No worries, Fluentify shows you what went wrong and how to crush it next time. Whether you want to sound like a local or just impress your friends, Fluentify has your back, making language learning fun, fast, and fearless!
 
 ## Features
+- **Language**: Select any language you would like to learn.
 - **Real-time Pronunciation Feedback**: Get instant feedback on your pronunciation to improve your speaking skills.
 - **Grammar Correction**: Receive personalized corrections to refine your grammar and sentence structure.
 - **Interactive explanations**: Understand why you made a mistake and how to avoid it in the future.
