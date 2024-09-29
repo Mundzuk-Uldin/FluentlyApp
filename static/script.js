@@ -104,11 +104,11 @@ speechRate.addEventListener('input', () => {
 function updateStatus(message, type) {
     statusText.innerText = message;
     if (type === 'success') {
-        statusText.style.color = 'green';
+        statusText.style.color = '#28a745'; // Success green
     } else if (type === 'error') {
-        statusText.style.color = 'red';
+        statusText.style.color = '#dc3545'; // Error red
     } else {
-        statusText.style.color = '#007bff'; // Bootstrap primary color
+        statusText.style.color = '#4a6cf7'; // Primary color
     }
 }
 
