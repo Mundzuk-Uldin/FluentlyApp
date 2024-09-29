@@ -24,7 +24,7 @@ Mess up? No worries, Fluentify shows you what went wrong and how to crush it nex
 1. Download the required packages by running 
 
 ```shell
-pip install to-requirements.txt
+pip install -r requirements.txt
 ````
 2. Insert your own API Key by creating a `.env` file in the root directory and adding the following line:
 
